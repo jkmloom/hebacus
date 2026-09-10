@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home screen widget reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --accent-green:#2FD673;
+    --accent-amber:#FFB443;
+    --accent-red:#FF5C5C;
+    --accent-blue:#4C8DFF;
+    --accent-teal:#2FC9B0;
+    --accent-violet:#8B6BFF;
+    --accent-coral:#FF7A59;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Manrope',system-ui,-apple-system,sans-serif;
+    min-height:100vh;
+    transition:background-color .35s ease, color .35s ease;
+  }
+
+  body[data-theme="light"]{
+    --page-bg:#E7E9ED;
+    --panel-bg:#FFFFFF;
+    --panel-border:rgba(18,21,26,0.08);
+    --ink:#12151A;
+    --ink-soft:#5B6472;
+    --ink-faint:#9AA2AD;
+  }
+  body[data-theme="dark"]{
+    --page-bg:#0E1013;
+    --panel-bg:#1A1D22;
+    --panel-border:rgba(238,240,243,0.08);
+    --ink:#EEF0F3;
+    --ink-soft:#9AA3B0;
+    --ink-faint:#5B6472;
+  }
+
+  body{background:var(--page-bg); color:var(--ink);}
+
+  .page{max-width:1180px; margin:0 auto; padding:48px 28px 96px;}
+
+  .page-head{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    gap:24px; flex-wrap:wrap; margin-bottom:56px;
+  }
+  .page-head h1{
+    font-size:clamp(1.7rem, 3vw, 2.3rem);
+    font-weight:800; letter-spacing:-0.02em; margin:6px 0 10px;
+  }
+  .page-head .kicker{
+    font-size:.85rem; font-weight:600; color:var(--ink-faint); margin:0;
+  }
+  .page-head p.lede{
+    max-width:46ch; color:var(--ink-soft); font-size:.98rem; line-height:1.55; margin:0;
+  }
+
+  .theme-switch{
+    display:flex; align-items:center; gap:10px;
+    background:var(--panel-bg); border:1px solid var(--panel-border);
+    padding:8px 14px 8px 8px; border-radius:999px; cursor:pointer;
+    font-family:inherit; font-size:.86rem; font-weight:700; color:var(--ink);
+    transition:background-color .3s ease, border-color .3s ease;
+  }
+  .theme-switch:focus-visible{outline:2px solid var(--accent-blue); outline-offset:2px;}
+  .switch-track{
+    width:38px; height:22px; border-radius:999px; background:var(--ink-faint);
+    position:relative; transition:background-color .25s ease; flex:none;
+  }
+  .switch-thumb{
+    position:absolute; top:2px; left:2px; width:18px; height:18px; border-radius:50%;
+    background:#fff; transition:transform .25s ease;
+    box-shadow:0 1px 2px rgba(0,0,0,.25);
+  }
+  body[data-theme="dark"] .switch-track{background:var(--accent-violet);}
+  body[data-theme="dark"] .switch-thumb{transform:translateX(16px); background:#111318;}
+
+  main.board{display:flex; flex-direction:column; gap:64px;}
+
+  .widget-block-head{max-width:60ch; margin-bottom:22px;}
+  .widget-block-head h2{font-size:1.3rem; font-weight:800; margin:0 0 6px; letter-spacing:-0.01em;}
+  .widget-block-head p{margin:0; color:var(--ink-soft); font-size:.92rem; line-height:1.55;}
+
+  .widget-row{display:flex; gap:36px; flex-wrap:wrap; align-items:flex-start;}
+
+  .widget-stage{display:flex; flex-direction:column; gap:10px;}
+  .widget-shell{
+    resize:both; overflow:hidden;
+    border-radius:26px;
+    min-width:96px; min-height:64px;
+    max-width:420px; max-height:340px;
+  }
+  .resize-hint{font-size:.76rem; color:var(--ink-faint); margin:0; font-weight:600;}
+
+  /* ---------- shared widget shell ---------- */
+  .widget{
+    position:relative; width:100%; height:100%;
+    border-radius:26px; overflow:hidden;
+    font-family:'Manrope',system-ui,sans-serif;
+    container-type:inline-size; container-name:card;
+    isolation:isolate;
+  }
+  .widget[data-theme="light"]{
+    --ink:#12151A; --ink-soft:#5B6472; --ink-faint:#9AA2AD;
+    --surface:#F3F4F7; --track:rgba(18,21,26,0.09);
+    --shadow:0 1px 2px rgba(20,23,28,.07), 0 12px 28px rgba(20,23,28,.08);
+    background:var(--surface); color:var(--ink); box-shadow:var(--shadow);
+  }
+  .widget[data-theme="dark"]{
+    --ink:#EEF0F3; --ink-soft:#9AA3B0; --ink-faint:#5B6472;
+    --surface:#1A1D22; --track:rgba(238,240,243,0.10);
+    --shadow:0 1px 0 rgba(255,255,255,.04) inset, 0 20px 44px rgba(0,0,0,.55);
+    background:var(--surface); color:var(--ink); box-shadow:var(--shadow);
+  }
+
+  /* mini comparison previews */
+  .mini-row{display:flex; gap:16px; margin-top:6px;}
+  .mini-preview{display:flex; flex-direction:column; align-items:center; gap:8px;}
+  .mini-preview .widget{width:132px; height:132px; border-radius:20px;}
+  .bt-block .mini-preview .widget, .wifi-block .mini-preview .widget{width:168px; height:100px; border-radius:18px;}
+  .mini-label{font-size:.72rem; font-weight:700; color:var(--ink-faint);}
+
+  /* ================= BATTERY ================= */
+  .battery-fill-track{
+    position:absolute; top:16px; right:16px; bottom:16px; width:6px;
+    border-radius:6px; background:var(--track);
+  }
+  .battery-fill{
+    position:absolute; right:16px; bottom:16px; width:6px; border-radius:6px;
+    background:var(--accent-green); height:50%;
+    transition:height .5s cubic-bezier(.4,0,.2,1), background-color .3s ease;
+  }
+  .battery-widget.is-charging .battery-fill{background:var(--accent-amber); animation:charge-pulse 1.7s ease-in-out infinite;}
+  .battery-widget.is-low .battery-fill{background:var(--accent-red);}
+  @keyframes charge-pulse{0%,100%{opacity:1;}50%{opacity:.5;}}
+
+  .bolt-icon{
+    position:absolute; top:16px; left:16px; width:16px; height:16px;
+    color:var(--accent-amber); opacity:0; transition:opacity .3s ease;
+  }
+  .battery-widget.is-charging .bolt-icon{opacity:1;}
+
+  .battery-body{position:absolute; left:18px; bottom:16px; right:32px;}
+  .battery-numeral{
+    display:flex; align-items:baseline;
+    font-weight:800; letter-spacing:-0.03em; line-height:1;
+    font-variant-numeric:tabular-nums;
+    font-size:2rem; font-size:clamp(1.5rem, 19cqi, 3.4rem);
+  }
+  .battery-numeral .unit{font-weight:700; margin-left:2px; color:var(--ink-soft);
+    font-size:1rem; font-size:clamp(.8rem, 8cqi, 1.4rem);}
+  .battery-caption{
+    margin-top:4px; font-weight:600; color:var(--ink-soft);
+    font-size:.82rem; font-size:clamp(.66rem, 4.4cqi, .92rem);
+  }
+  @container card (max-width: 130px){ .battery-caption{display:none;} }
+  @container card (max-width: 96px){ .bolt-icon{top:10px; left:10px; width:12px; height:12px;}
+    .battery-fill-track,.battery-fill{top:10px; right:10px; bottom:10px;}
+    .battery-body{left:12px; bottom:10px; right:24px;} }
+
+  /* ================= BLUETOOTH / WIRED ================= */
+  .bt-track{position:absolute; left:18px; right:18px; bottom:20px; height:2px; background:var(--track);}
+  .bt-node{
+    position:absolute; bottom:20px; width:7px; height:7px; border-radius:50%;
+    background:var(--ink-faint); transform:translate(-50%,-50%);
+    transition:background-color .3s ease;
+  }
+  .bt-node.node-a{left:18px;}
+  .bt-node.node-b{left:calc(100% - 18px);}
+  .bt-pulse{
+    position:absolute; bottom:20px; left:18px; width:6px; height:6px; border-radius:50%;
+    background:var(--accent-blue); transform:translate(-50%,-50%); opacity:0;
+  }
+  .bt-widget.is-connected .bt-pulse{opacity:1; animation:bt-travel 2.8s linear infinite;}
+  .bt-widget.is-connected .bt-node{background:var(--accent-blue);}
+  .bt-widget.is-connected.is-wired .bt-node,
+  .bt-widget.is-connected.is-wired .bt-pulse{background:var(--accent-teal);}
+  @keyframes bt-travel{0%{left:18px;}50%{left:calc(100% - 18px);}100%{left:18px;}}
+
+  .bt-type-icon{
+    position:absolute; top:16px; right:16px; width:16px; height:16px;
+    color:var(--ink-faint); transition:color .3s ease;
+  }
+  .bt-widget.is-connected .bt-type-icon{color:var(--accent-blue);}
+  .bt-widget.is-connected.is-wired .bt-type-icon{color:var(--accent-teal);}
+
+  .bt-body{position:absolute; left:18px; top:16px; right:40px;}
+  .bt-device-name{
+    font-weight:800; letter-spacing:-0.01em; line-height:1.2;
+    font-size:1.1rem; font-size:clamp(.9rem, 10cqi, 1.5rem);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .bt-status{
+    margin-top:5px; font-weight:600; color:var(--ink-soft);
+    font-size:.8rem; font-size:clamp(.64rem, 4.2cqi, .86rem);
+  }
+  @container card (max-width: 130px){ .bt-status{display:none;} }
+
+  /* ================= WIFI / HOTSPOT ================= */
+  .wifi-bars{
+    position:absolute; top:18px; right:18px; display:flex; align-items:flex-end; gap:3px; height:16px;
+  }
+  .wifi-bars span{width:4px; border-radius:2px; background:var(--track); transition:background-color .3s ease;}
+  .wifi-bars span:nth-child(1){height:30%;}
+  .wifi-bars span:nth-child(2){height:55%;}
+  .wifi-bars span:nth-child(3){height:78%;}
+  .wifi-bars span:nth-child(4){height:100%;}
+  .wifi-bars span.active{background:var(--accent-violet);}
+
+  .hotspot-rings{position:absolute; top:14px; right:14px; width:26px; height:26px; display:none;}
+  .wifi-widget[data-mode="hotspot"] .hotspot-rings{display:block;}
+  .wifi-widget[data-mode="hotspot"] .wifi-bars{display:none;}
+  .hotspot-rings .ring{
+    position:absolute; inset:0; margin:auto; border:1.5px solid var(--accent-coral);
+    border-radius:50%; opacity:0; animation:ring-pulse 2.4s ease-out infinite;
+  }
+  .hotspot-rings .ring.r1{width:12px; height:12px;}
+  .hotspot-rings .ring.r2{width:22px; height:22px; animation-delay:.7s;}
+  .hotspot-rings .dot{
+    position:absolute; top:50%; left:50%; width:6px; height:6px; border-radius:50%;
+    background:var(--accent-coral); transform:translate(-50%,-50%);
+  }
+  @keyframes ring-pulse{0%{transform:scale(.5); opacity:.55;}100%{transform:scale(1.15); opacity:0;}}
+
+  .wifi-widget[data-mode="off"] .wifi-bars span{background:var(--track) !important;}
+
+  .wifi-body{position:absolute; left:18px; bottom:16px; right:18px;}
+  .wifi-ssid{
+    font-weight:800; letter-spacing:-0.01em; line-height:1.2;
+    font-size:1.1rem; font-size:clamp(.9rem, 10cqi, 1.5rem);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .wifi-status{
+    margin-top:5px; font-weight:600; color:var(--ink-soft);
+    font-size:.8rem; font-size:clamp(.64rem, 4.2cqi, .86rem);
+  }
+  @container card (max-width: 130px){ .wifi-status{display:none;} }
+
+  /* ================= controls panel ================= */
+  .controls{
+    background:var(--panel-bg); border:1px solid var(--panel-border);
+    border-radius:20px; padding:20px 22px; min-width:260px; flex:1 1 260px;
+    display:flex; flex-direction:column; gap:16px;
+    transition:background-color .3s ease, border-color .3s ease;
+  }
+  .control-row{display:flex; flex-direction:column; gap:8px;}
+  .control-row label.field-label{
+    font-size:.82rem; font-weight:700; color:var(--ink-soft);
+    display:flex; justify-content:space-between; gap:8px;
+  }
+  .control-row label.field-label span.val{color:var(--ink); font-weight:800;}
+
+  input[type="range"]{
+    -webkit-appearance:none; appearance:none; width:100%; height:4px;
+    border-radius:4px; background:var(--panel-border); outline:none;
+  }
+  input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:16px; height:16px; border-radius:50%;
+    background:var(--accent-violet); cursor:pointer; border:2px solid var(--panel-bg);
+    box-shadow:0 0 0 1px var(--panel-border);
+  }
+  input[type="range"]::-moz-range-thumb{
+    width:16px; height:16px; border-radius:50%; background:var(--accent-violet);
+    cursor:pointer; border:2px solid var(--panel-bg); box-shadow:0 0 0 1px var(--panel-border);
+  }
+
+  input[type="text"]{
+    width:100%; border:none; border-bottom:2px solid var(--panel-border);
+    background:transparent; color:var(--ink); font-family:inherit;
+    font-size:.95rem; font-weight:700; padding:6px 2px; outline:none;
+    transition:border-color .2s ease;
+  }
+  input[type="text"]:focus-visible{border-color:var(--accent-violet);}
+
+  .toggle-row{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+  .toggle-row .toggle-text{font-size:.88rem; font-weight:700;}
+  .toggle-input{position:relative; width:40px; height:24px; flex:none;}
+  .toggle-input input{position:absolute; inset:0; opacity:0; margin:0; cursor:pointer; z-index:1;}
+  .toggle-visual{
+    position:absolute; inset:0; border-radius:999px; background:var(--panel-border);
+    transition:background-color .25s ease; pointer-events:none;
+  }
+  .toggle-visual::after{
+    content:""; position:absolute; top:3px; left:3px; width:18px; height:18px;
+    border-radius:50%; background:#fff; box-shadow:0 1px 2px rgba(0,0,0,.3);
+    transition:transform .25s ease;
+  }
+  .toggle-input input:checked + .toggle-visual{background:var(--accent-violet);}
+  .toggle-input input:checked + .toggle-visual::after{transform:translateX(16px);}
+  .toggle-input input:focus-visible + .toggle-visual{outline:2px solid var(--accent-blue); outline-offset:2px;}
+
+  .segmented{display:flex; border:1px solid var(--panel-border); border-radius:12px; overflow:hidden;}
+  .segmented label{
+    flex:1; text-align:center; padding:8px 6px; font-size:.82rem; font-weight:700;
+    color:var(--ink-soft); cursor:pointer; transition:background-color .2s ease, color .2s ease;
+  }
+  .segmented label + label{border-left:1px solid var(--panel-border);}
+  .segmented input{position:absolute; opacity:0; width:0; height:0;}
+  .segmented input:checked + label{background:var(--accent-violet); color:#fff;}
+  .segmented label.is-active{background:var(--accent-violet); color:#fff;}
+
+  @media (max-width: 640px){
+    .page-head{flex-direction:column;}
+    .widget-row{gap:24px;}
+  }
+</style>
+</head>
+<body data-theme="light">
+<div class="page">
+
+  <header class="page-head">
+    <div>
+      <p class="kicker">Home screen widgets</p>
+      <h1>Widget reference</h1>
+      <p class="lede">Battery, connection and network status, built to sit quietly on the home screen and read at a glance in any size.</p>
+    </div>
+    <button class="theme-switch" id="themeSwitch" type="button" aria-pressed="false">
+      <span class="switch-track"><span class="switch-thumb"></span></span>
+      <span id="themeLabel">Light mode</span>
+    </button>
+  </header>
+
+  <main class="board">
+
+    <!-- ================= BATTERY ================= -->
+    <section class="battery-block">
+      <div class="widget-block-head">
+        <h2>Battery</h2>
+        <p>The edge fill reads the charge level directly. Colour appears only while charging or when the battery is low — everything else stays quiet ink.</p>
+      </div>
+      <div class="widget-row">
+        <div class="widget-stage">
+          <div class="widget-shell" style="width:180px; height:180px;">
+            <div class="widget battery-widget is-interactive" data-widget-role="battery" data-theme="light" id="batteryMain"></div>
+          </div>
+          <p class="resize-hint">Drag the bottom-right corner to test other sizes</p>
+          <div class="mini-row">
+            <div class="mini-preview">
+              <div class="widget battery-widget" data-widget-role="battery" data-theme="light"></div>
+              <span class="mini-label">Light</span>
+            </div>
+            <div class="mini-preview">
+              <div class="widget battery-widget" data-widget-role="battery" data-theme="dark"></div>
+              <span class="mini-label">Dark</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <div class="control-row">
+            <label class="field-label" for="batteryPct">Charge level <span class="val" id="batteryPctVal">82%</span></label>
+            <input type="range" id="batteryPct" min="0" max="100" value="82">
+          </div>
+          <div class="toggle-row">
+            <span class="toggle-text">Charging</span>
+            <span class="toggle-input">
+              <input type="checkbox" id="batteryCharging">
+              <span class="toggle-visual"></span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= BLUETOOTH / WIRED ================= -->
+    <section class="bt-block">
+      <div class="widget-block-head">
+        <h2>Bluetooth &amp; wired devices</h2>
+        <p>Two nodes joined by a thread — a travelling pulse shows a live link. Blue marks a Bluetooth pairing, teal marks a wired connection.</p>
+      </div>
+      <div class="widget-row">
+        <div class="widget-stage">
+          <div class="widget-shell" style="width:260px; height:130px;">
+            <div class="widget bt-widget is-interactive" data-widget-role="bt" data-theme="light" id="btMain"></div>
+          </div>
+          <p class="resize-hint">Drag the bottom-right corner to test other sizes</p>
+          <div class="mini-row">
+            <div class="mini-preview">
+              <div class="widget bt-widget" data-widget-role="bt" data-theme="light"></div>
+              <span class="mini-label">Light</span>
+            </div>
+            <div class="mini-preview">
+              <div class="widget bt-widget" data-widget-role="bt" data-theme="dark"></div>
+              <span class="mini-label">Dark</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <div class="toggle-row">
+            <span class="toggle-text">Connected</span>
+            <span class="toggle-input">
+              <input type="checkbox" id="btConnected" checked>
+              <span class="toggle-visual"></span>
+            </span>
+          </div>
+          <div class="control-row">
+            <label class="field-label">Connection type</label>
+            <div class="segmented" id="btTypeSeg">
+              <input type="radio" name="btType" id="btTypeBt" value="bluetooth" checked>
+              <label for="btTypeBt">Bluetooth</label>
+              <input type="radio" name="btType" id="btTypeWired" value="wired">
+              <label for="btTypeWired">Wired</label>
+            </div>
+          </div>
+          <div class="control-row">
+            <label class="field-label" for="btName">Device name</label>
+            <input type="text" id="btName" value="Pixel Buds Pro" maxlength="28">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= WIFI / HOTSPOT ================= -->
+    <section class="wifi-block">
+      <div class="widget-block-head">
+        <h2>Wi-Fi &amp; hotspot</h2>
+        <p>Rising bars read incoming signal strength on Wi-Fi. In hotspot mode the bars become soft outward rings, since the phone is broadcasting rather than receiving.</p>
+      </div>
+      <div class="widget-row">
+        <div class="widget-stage">
+          <div class="widget-shell" style="width:220px; height:150px;">
+            <div class="widget wifi-widget is-interactive" data-widget-role="wifi" data-theme="light" id="wifiMain"></div>
+          </div>
+          <p class="resize-hint">Drag the bottom-right corner to test other sizes</p>
+          <div class="mini-row">
+            <div class="mini-preview">
+              <div class="widget wifi-widget" data-widget-role="wifi" data-theme="light"></div>
+              <span class="mini-label">Light</span>
+            </div>
+            <div class="mini-preview">
+              <div class="widget wifi-widget" data-widget-role="wifi" data-theme="dark"></div>
+              <span class="mini-label">Dark</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <div class="control-row">
+            <label class="field-label">Mode</label>
+            <div class="segmented" id="wifiModeSeg">
+              <input type="radio" name="wifiMode" id="modeOff" value="off">
+              <label for="modeOff">Off</label>
+              <input type="radio" name="wifiMode" id="modeWifi" value="wifi" checked>
+              <label for="modeWifi">Wi-Fi</label>
+              <input type="radio" name="wifiMode" id="modeHotspot" value="hotspot">
+              <label for="modeHotspot">Hotspot</label>
+            </div>
+          </div>
+          <div class="control-row">
+            <label class="field-label" for="wifiName">Network name</label>
+            <input type="text" id="wifiName" value="Home Fibre 5G" maxlength="28">
+          </div>
+          <div class="control-row" id="wifiStrengthRow">
+            <label class="field-label" for="wifiStrength">Signal strength <span class="val" id="wifiStrengthVal">3 of 4</span></label>
+            <input type="range" id="wifiStrength" min="1" max="4" value="3">
+          </div>
+          <div class="control-row" id="wifiDevicesRow" style="display:none;">
+            <label class="field-label" for="wifiDevices">Connected devices <span class="val" id="wifiDevicesVal">2</span></label>
+            <input type="range" id="wifiDevices" min="0" max="8" value="2">
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  // ---------- inner markup templates (kept identical across all instances of a role) ----------
+  const BATTERY_HTML = `
+    <div class="battery-fill-track"></div>
+    <div class="battery-fill"></div>
+    <svg class="bolt-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>
+    <div class="battery-body">
+      <div class="battery-numeral"><span class="num">0</span><span class="unit">%</span></div>
+      <div class="battery-caption">On battery</div>
+    </div>
+  `;
+
+  const BT_HTML = `
+    <div class="bt-track"></div>
+    <span class="bt-node node-a"></span>
+    <span class="bt-node node-b"></span>
+    <span class="bt-pulse"></span>
+    <svg class="bt-type-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+      <circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/>
+      <path d="M8 12a4 4 0 0 1 8 0M5.5 12a7 7 0 0 1 13 0"/>
+    </svg>
+    <div class="bt-body">
+      <div class="bt-device-name">No device</div>
+      <div class="bt-status">Not connected</div>
+    </div>
+  `;
+
+  const WIFI_HTML = `
+    <div class="wifi-bars"><span></span><span></span><span></span><span></span></div>
+    <div class="hotspot-rings"><span class="ring r1"></span><span class="ring r2"></span><span class="dot"></span></div>
+    <div class="wifi-body">
+      <div class="wifi-ssid">Network</div>
+      <div class="wifi-status">Wi-Fi off</div>
+    </div>
+  `;
+
+  document.querySelectorAll('.battery-widget').forEach(el => el.innerHTML = BATTERY_HTML);
+  document.querySelectorAll('.bt-widget').forEach(el => el.innerHTML = BT_HTML);
+  document.querySelectorAll('.wifi-widget').forEach(el => el.innerHTML = WIFI_HTML);
+
+  // ---------- state ----------
+  const state = {
+    battery: { pct: 82, charging: false },
+    bt: { connected: true, wired: false, name: 'Pixel Buds Pro' },
+    wifi: { mode: 'wifi', ssid: 'Home Fibre 5G', strength: 3, devices: 2 }
+  };
+
+  function renderBattery(){
+    const { pct, charging } = state.battery;
+    document.querySelectorAll('[data-widget-role="battery"]').forEach(w => {
+      w.querySelector('.battery-fill').style.height = pct + '%';
+      w.querySelector('.num').textContent = pct;
+      w.classList.toggle('is-charging', charging);
+      w.classList.toggle('is-low', !charging && pct <= 20);
+      w.querySelector('.battery-caption').textContent =
+        charging ? 'Charging' : (pct <= 20 ? 'Low battery' : 'On battery');
+    });
+  }
+
+  function renderBt(){
+    const { connected, wired, name } = state.bt;
+    document.querySelectorAll('[data-widget-role="bt"]').forEach(w => {
+      w.classList.toggle('is-connected', connected);
+      w.classList.toggle('is-wired', wired);
+      w.querySelector('.bt-device-name').textContent = connected ? (name || 'Unnamed device') : 'No device';
+      w.querySelector('.bt-status').textContent = connected
+        ? (wired ? 'Connected over the wire' : 'Connected over Bluetooth')
+        : 'Not connected';
+    });
+  }
+
+  function renderWifi(){
+    const { mode, ssid, strength, devices } = state.wifi;
+    document.querySelectorAll('[data-widget-role="wifi"]').forEach(w => {
+      w.dataset.mode = mode;
+      const bars = w.querySelectorAll('.wifi-bars span');
+      bars.forEach((bar, i) => bar.classList.toggle('active', mode === 'wifi' && i < strength));
+
+      const nameEl = w.querySelector('.wifi-ssid');
+      const statusEl = w.querySelector('.wifi-status');
+
+      if (mode === 'off'){
+        nameEl.textContent = ssid || 'Network';
+        statusEl.textContent = 'Wi-Fi off';
+      } else if (mode === 'wifi'){
+        nameEl.textContent = ssid || 'Network';
+        const labels = { 1:'Weak signal', 2:'Fair signal', 3:'Good signal', 4:'Strong signal' };
+        statusEl.textContent = labels[strength] || 'Connected';
+      } else {
+        nameEl.textContent = ssid || 'Hotspot';
+        statusEl.textContent = devices === 1 ? 'Broadcasting to 1 device' : `Broadcasting to ${devices} devices`;
+      }
+    });
+  }
+
+  // ---------- wire up controls ----------
+  const batteryPct = document.getElementById('batteryPct');
+  const batteryPctVal = document.getElementById('batteryPctVal');
+  const batteryCharging = document.getElementById('batteryCharging');
+  batteryPct.addEventListener('input', () => {
+    state.battery.pct = Number(batteryPct.value);
+    batteryPctVal.textContent = state.battery.pct + '%';
+    renderBattery();
+  });
+  batteryCharging.addEventListener('change', () => {
+    state.battery.charging = batteryCharging.checked;
+    renderBattery();
+  });
+
+  const btConnected = document.getElementById('btConnected');
+  const btName = document.getElementById('btName');
+  document.querySelectorAll('input[name="btType"]').forEach(r => {
+    r.addEventListener('change', () => {
+      state.bt.wired = document.getElementById('btTypeWired').checked;
+      renderBt();
+    });
+  });
+  btConnected.addEventListener('change', () => {
+    state.bt.connected = btConnected.checked;
+    renderBt();
+  });
+  btName.addEventListener('input', () => {
+    state.bt.name = btName.value;
+    renderBt();
+  });
+
+  const wifiName = document.getElementById('wifiName');
+  const wifiStrength = document.getElementById('wifiStrength');
+  const wifiStrengthVal = document.getElementById('wifiStrengthVal');
+  const wifiDevices = document.getElementById('wifiDevices');
+  const wifiDevicesVal = document.getElementById('wifiDevicesVal');
+  const wifiStrengthRow = document.getElementById('wifiStrengthRow');
+  const wifiDevicesRow = document.getElementById('wifiDevicesRow');
+
+  document.querySelectorAll('input[name="wifiMode"]').forEach(r => {
+    r.addEventListener('change', () => {
+      state.wifi.mode = r.value;
+      wifiStrengthRow.style.display = state.wifi.mode === 'wifi' ? '' : 'none';
+      wifiDevicesRow.style.display = state.wifi.mode === 'hotspot' ? '' : 'none';
+      renderWifi();
+    });
+  });
+  wifiName.addEventListener('input', () => {
+    state.wifi.ssid = wifiName.value;
+    renderWifi();
+  });
+  wifiStrength.addEventListener('input', () => {
+    state.wifi.strength = Number(wifiStrength.value);
+    wifiStrengthVal.textContent = state.wifi.strength + ' of 4';
+    renderWifi();
+  });
+  wifiDevices.addEventListener('input', () => {
+    state.wifi.devices = Number(wifiDevices.value);
+    wifiDevicesVal.textContent = state.wifi.devices;
+    renderWifi();
+  });
+
+  // ---------- global theme toggle (drives page chrome + interactive widgets only) ----------
+  const themeSwitch = document.getElementById('themeSwitch');
+  const themeLabel = document.getElementById('themeLabel');
+  let isDark = false;
+  themeSwitch.addEventListener('click', () => {
+    isDark = !isDark;
+    document.body.dataset.theme = isDark ? 'dark' : 'light';
+    themeLabel.textContent = isDark ? 'Dark mode' : 'Light mode';
+    themeSwitch.setAttribute('aria-pressed', String(isDark));
+    document.querySelectorAll('.is-interactive').forEach(w => {
+      w.dataset.theme = isDark ? 'dark' : 'light';
+    });
+  });
+
+  // ---------- initial paint ----------
+  renderBattery();
+  renderBt();
+  renderWifi();
+</script>
+</body>
+</html>
