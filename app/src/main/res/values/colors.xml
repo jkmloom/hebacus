@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base -->
+    <color name="black">#000000</color>
+
+    <!-- Accents -->
+    <color name="accent_green">#2FD673</color>
+    <color name="accent_amber">#FFB443</color>
+    <color name="accent_red">#FF5C5C</color>
+    <color name="accent_blue">#4C8DFF</color>
+    <color name="accent_teal">#2FC9B0</color>
+    <color name="accent_violet">#8B6BFF</color>
+    <color name="accent_coral">#FF7A59</color>
+
+    <!-- Light Theme Semantic Colors -->
+    <color name="page_bg">#E7E9ED</color>
+    <color name="panel_bg">#FFFFFF</color>
+    <color name="panel_border">#1412151A</color>
+    <color name="widget_surface">#F3F4F7</color>
+    <color name="widget_track">#1712151A</color>
+    <color name="ink">#12151A</color>
+    <color name="ink_soft">#5B6472</color>
+    <color name="ink_faint">#9AA2AD</color>
+
+    <!-- Constant Widget Colors for explicit light/dark preview -->
+    <color name="widget_surface_light">#F3F4F7</color>
+    <color name="widget_track_light">#1712151A</color>
+    <color name="ink_light">#12151A</color>
+    <color name="ink_soft_light">#5B6472</color>
+    <color name="ink_faint_light">#9AA2AD</color>
+
+    <color name="widget_surface_dark">#1A1D22</color>
+    <color name="widget_track_dark">#1AEEF0F3</color>
+    <color name="ink_dark">#EEF0F3</color>
+    <color name="ink_soft_dark">#9AA3B0</color>
+    <color name="ink_faint_dark">#5B6472</color>
+</resources>

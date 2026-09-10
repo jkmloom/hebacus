@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/floating_root"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/floating_card"
+        android:layout_width="220dp"
+        android:layout_height="140dp"
+        app:cardCornerRadius="26dp"
+        app:cardElevation="10dp"
+        app:strokeColor="@color/panel_border"
+        app:strokeWidth="1dp"
+        app:cardBackgroundColor="@color/widget_surface">
+
+        <FrameLayout
+            android:id="@+id/floating_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!-- Close Button (Small Circle in Top Right) -->
+        <ImageButton
+            android:id="@+id/btn_close_floating"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="8dp"
+            android:background="@drawable/bg_circle_node"
+            android:backgroundTint="@color/widget_track"
+            android:contentDescription="Close Floating Widget"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            app:tint="@color/ink_soft" />
+
+    </com.google.android.material.card.MaterialCardView>
+</FrameLayout>

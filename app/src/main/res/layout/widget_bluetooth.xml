@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_widget_surface"
+    android:padding="16dp">
+
+    <!-- Device Name & Status -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_marginEnd="36dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_bt_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-black"
+            android:maxLines="1"
+            android:text="Pixel Buds Pro"
+            android:textColor="@color/ink"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_bt_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="Connected over Bluetooth"
+            android:textColor="@color/ink_soft"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <!-- Connection Type Icon (Top-Right) -->
+    <ImageView
+        android:id="@+id/iv_bt_icon"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_gravity="top|end"
+        android:src="@drawable/ic_bt_connected"
+        android:contentDescription="Connection Status" />
+
+    <!-- Two-Node Thread Indicator (Bottom) -->
+    <ImageView
+        android:id="@+id/iv_bt_thread"
+        android:layout_width="match_parent"
+        android:layout_height="14dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:scaleType="fitXY"
+        android:contentDescription="Connection Thread" />
+</FrameLayout>

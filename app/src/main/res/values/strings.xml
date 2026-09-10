@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Hebacus</string>
+    <string name="battery_widget_name">Battery Status</string>
+    <string name="battery_widget_desc">Minimal battery meter with charging and low battery alerts</string>
+    <string name="bluetooth_widget_name">Bluetooth &amp; Devices</string>
+    <string name="bluetooth_widget_desc">Connected audio and wired devices status</string>
+    <string name="wifi_widget_name">Wi-Fi &amp; Hotspot</string>
+    <string name="wifi_widget_desc">Network SSID, signal strength, and hotspot status</string>
+</resources>

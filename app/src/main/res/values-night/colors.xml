@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark Theme Semantic Colors -->
+    <color name="page_bg">#0E1013</color>
+    <color name="panel_bg">#1A1D22</color>
+    <color name="panel_border">#14EEF0F3</color>
+    <color name="widget_surface">#1A1D22</color>
+    <color name="widget_track">#1AEEF0F3</color>
+    <color name="ink">#EEF0F3</color>
+    <color name="ink_soft">#9AA3B0</color>
+    <color name="ink_faint">#5B6472</color>
+</resources>
